@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 # Simple python script to construct Wright--Fisher class and run diffusion simulator
 
 # Define Wright--Fisher diffusion class parameters
-mutation_vector = np.array([0.5, 0.5])
+mutation_vector = np.array([1., 1.])
 non_neutral = False
 sigma = 0.0
 selectionSetup = 0
@@ -23,6 +23,15 @@ startT = 0.0
 endT = 0.5
 Absorption = False
 Filename_sim = "EWF_diffusion_sim.txt"
+
+d = 0.
+
+for _ in range(100):
+    print(WF.wright_fisher_sample(t := (endT - startT)))
+
+print("python", WF.wright_fisher_samples(t, np.empty(10)))
+import sys
+sys.exit()
 
 # Run simulator
 WF.DiffusionRunner(nSim, x, startT, endT, Absorption, Filename_sim)

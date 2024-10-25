@@ -65,22 +65,14 @@ PYBIND11_MODULE(EWF_pybind, m) {
       .def("wright_fisher_sample", &wf_end, py::return_value_policy::copy)
       .def("wright_fisher_samples", [](WrightFisher& wf, double100 t, py::array_t<double> wf_end_points_array) {
 
+           auto n_samples = wf_end_points_array.size();
            py::buffer_info buf = wf_end_points_array.request();
-           auto n_samples = buf.size;
-
-           auto ptr_buf = static_cast<double*>(buf.ptr);
+           auto ptr_buf = static_cast<double *>(buf.ptr);
 
            for (int i = 0; i < n_samples; i++) {
                 ptr_buf[i] = wf_end(wf, t);
-                std::cout << ptr_buf[i] << ',';
+                std::cout << ptr_buf[i] << '\n';
            }
-
-           py::buffer_info buf_debug = wf_end_points_array.request();
-           auto ptr_debug = static_cast<double*>(buf_debug.ptr);
-           std::cout << std::endl << "from c++:" << std::endl;
-           for (int i = 0; i < n_samples; i++) {
-                std::cout << ptr_debug[i] << ',';
-           }
-           std::cout << std::endl;
+           return wf_end_points_array;
       });
 }
