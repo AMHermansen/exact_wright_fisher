@@ -32,46 +32,6 @@ class WrightFisher {
     ThetaSetter();
     SelectionSetter();
     PhiSetter();
-    std::cout << R"(
-                           
-     +++           )|(     
-    (o o)         (o o)    
-ooO--(_)--Ooo-ooO--(_)--Ooo
-    _______       ________
-   / ____/ |     / / ____/
-  / __/  | | /| / / /_    
- / /___  | |/ |/ / __/    
-/_____/  |__/|__/_/       
-                          
-)" << '\n';
-    std::cout << "You've instantiated a WrightFisher class with the following "
-                 "parameters:"
-              << std::endl;
-    if (!thetaP.empty()) {
-      std::cout << "Theta vector: (" << thetaP.front() << ", " << thetaP.back()
-                << ")" << std::endl;
-    } else {
-      std::cout << "Theta vector: (0.0, 0.0)" << std::endl;
-    }
-    if (non_neutral) {
-      if (SelectionSetup == 0) {
-        std::cout << "Genic selection: " << sigma << std::endl;
-      } else if (SelectionSetup == 1) {
-        std::cout << "Diploid selection with:" << std::endl;
-        std::cout << "Sigma: " << sigma << std::endl;
-        std::cout << "Dominance parameter: " << dominanceParameter << std::endl;
-      } else {
-        std::cout << "Polynomial selection with degree " << SelPolyDeg
-                  << " with entries:" << std::endl;
-        for (vector<double>::iterator sc_it = selectionCoeffs.begin();
-             sc_it != selectionCoeffs.end(); sc_it++) {
-          std::cout << *sc_it << ", ";
-        }
-        std::cout << "." << std::endl;
-      }
-    } else {
-      std::cout << "No selection." << std::endl;
-    }
   }
 
   double100 phiMin, phiMax, AtildeMax;
@@ -251,6 +211,13 @@ ooO--(_)--Ooo-ooO--(_)--Ooo
 
   /// SIMULATION RUNNER FUNCTIONS
 
+
+  double100 wright_fisher_sample(double100 t,  double100 diffusion_threshold, double100 bridge_threshold){
+  const Options o(diffusion_threshold, bridge_threshold);
+  boost::random::mt19937 gen;
+  return DrawUnconditionedDiffusion(0, t, o, gen).first;   
+}
+
   void DiffusionRunner(int nSim, double100 x, double100 startT, double100 endT,
                        bool Absorption, string &Filename,
                        double100 diffusion_threshold,
@@ -271,6 +238,7 @@ ooO--(_)--Ooo-ooO--(_)--Ooo
                                         string &Filename,
                                         double100 diffusion_threshold,
                                         double100 bridge_threshold);
+  boost::random::mt19937 WF_gen;
 
  private:
   /// WRIGHT-FISHER PROPERTIES
@@ -285,7 +253,6 @@ ooO--(_)--Ooo-ooO--(_)--Ooo
   Polynomial SelectionFunction, PhiFunction, AtildeFunction;
   int thetaIndex;
   vector<vector<double100>> akm;
-  boost::random::mt19937 WF_gen;
 
   /// HELPER FUNCTIONS
 
