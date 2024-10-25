@@ -29,7 +29,7 @@ d = 0.
 for _ in range(100):
     print(WF.wright_fisher_sample(t := (endT - startT)))
 
-print("python", WF.wright_fisher_samples(t, np.empty(10)))
+print("python:", WF.wright_fisher_samples(t, np.empty(10)))
 import sys
 sys.exit()
 
